@@ -18,12 +18,12 @@ private:
 public:
     void        Insert(CLinklist*& root, int data);
     void        Display(CLinklist* root);
-    CLinklist*  AddTwoSortedLinkList(CLinklist* one, CLinklist* two);
-    CLinklist*  MergeTwoSortedLinkList(CLinklist* one, CLinklist* two);
-    CLinklist*  ReverseIteratively(CLinklist* root);
-    CLinklist*  ReverseRecursively(CLinklist*& root);
+    CLinklist* AddTwoSortedLinkList(CLinklist* one, CLinklist* two);
+    CLinklist* MergeTwoSortedLinkList(CLinklist* one, CLinklist* two);
+    CLinklist* ReverseIteratively(CLinklist* root);
+    CLinklist* ReverseRecursively(CLinklist* root);
     void        SortLinkList(CLinklist* root);
-    CLinklist*  FindMidNode(CLinklist* root);
+    CLinklist* FindMidNode(CLinklist* root);
     bool        IsLinklistContainCycle(CLinklist* root);
     void        DeleteNode(CLinklist*& root, int data);
     void        DeleteAllNodes(CLinklist* root);
@@ -270,7 +270,7 @@ CLinklist* CLinklist::ReverseIteratively(CLinklist* root)
     return prev;
 }
 
-CLinklist* CLinklist::ReverseRecursively(CLinklist*& root)
+CLinklist* CLinklist::ReverseRecursively(CLinklist* root)
 {
     if (IsNull(root))
         return root;
@@ -298,14 +298,50 @@ bool CLinklist::IsLinklistContainCycle(CLinklist* root)
     return false;
 }
 
+// there could be three cases
+// start, mid and end
 void CLinklist::DeleteNode(CLinklist*& root, int data)
 {
+    if (!IsNull(root))
+    {
+        // start node
+        if (root->m_data == data)
+        {
+            auto nextNode = root->m_nextNode;
+            delete root;
+            root = nextNode;
+            return;
+        }
 
+        auto tempNode = root;
+        while (tempNode && tempNode->m_nextNode->m_data != data)
+        {
+            tempNode = tempNode->m_nextNode;
+        }
+        // end, mid node
+        if (!IsNull(tempNode) && !IsNull(tempNode->m_nextNode))
+        {
+            auto nextNode = tempNode->m_nextNode->m_nextNode;
+            delete tempNode->m_nextNode;
+            tempNode->m_nextNode = nextNode;
+            return;
+        }
+
+        std::cout << data << " does not exist in the list for deletion\n";
+    }
 }
 
 void CLinklist::DeleteAllNodes(CLinklist* root)
 {
-
+    if (!IsNull(root))
+    {
+        while (!IsNull(root))
+        {
+            auto tempNode = root->m_nextNode;
+            delete root;
+            root = tempNode;
+        }
+    }
 }
 
 inline void CLinklist::RemoveDuplicatesFromUnsortedListUsingLoop(CLinklist* root)

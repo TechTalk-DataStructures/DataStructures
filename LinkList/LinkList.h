@@ -29,6 +29,13 @@ public:
     void        DeleteAllNodes(CLinklist* root);
     void        RemoveDuplicatesFromUnsortedListUsingLoop(CLinklist* root);
     void        RemoveDuplicatesFromSortedList(CLinklist* root);
+    CLinklist* SwapNodesInGroup(CLinklist* start, int k);
+    bool        SwapNodes(CLinklist* root, CLinklist** start);
+    bool        DetectLoop(CLinklist* root);
+    void        RemoveDuplicatesFromUnsortedListUsingHashing(CLinklist* root);
+    bool        isPallindrome(CLinklist* root);
+    void        DeleteNodeAtPosition(CLinklist** root, int position);
+    CLinklist* AddTwoListsRecursively(CLinklist* root1, CLinklist* root2);
 };
 
 bool CLinklist::IsNull(CLinklist* root)
@@ -286,6 +293,33 @@ CLinklist* CLinklist::ReverseRecursively(CLinklist* root)
 
 void CLinklist::SortLinkList(CLinklist* root)
 {
+    if (IsNull(root))
+        return;
+
+    CLinklist* p = root, * q = nullptr;
+    while (!IsNull(p) && !IsNull(p->m_nextNode))
+    {
+        q = p->m_nextNode;
+        CLinklist* minNode = q;
+        while (q != nullptr)
+        {
+            if (p->m_data > q->m_data)
+            {
+                if (minNode->m_data > q->m_data)
+                    minNode = q;
+            }
+            q = q->m_nextNode;
+        }
+
+        //  swap the data of the nodes
+        if (minNode && p->m_data > minNode->m_data)
+        {
+            auto temp = minNode->m_data;
+            minNode->m_data = p->m_data;
+            p->m_data = temp;
+        }
+        p = p->m_nextNode;
+    }
 }
 
 CLinklist* CLinklist::FindMidNode(CLinklist* root)
@@ -344,10 +378,6 @@ void CLinklist::DeleteAllNodes(CLinklist* root)
     }
 }
 
-inline void CLinklist::RemoveDuplicatesFromUnsortedListUsingLoop(CLinklist* root)
-{
-}
-
 inline void CLinklist::RemoveDuplicatesFromSortedList(CLinklist* root)
 {
     if (!IsNull(root) && !IsNull(root->m_nextNode))
@@ -377,4 +407,57 @@ inline void CLinklist::RemoveDuplicatesFromSortedList(CLinklist* root)
 
         //return new_start;
     }
+}
+
+inline CLinklist* CLinklist::SwapNodesInGroup(CLinklist* start, int k)
+{
+    return NULL;
+}
+
+inline bool CLinklist::SwapNodes(CLinklist* root, CLinklist** start)
+{
+    return false;
+}
+
+inline bool CLinklist::DetectLoop(CLinklist* root)
+{
+    return false;
+}
+
+inline void CLinklist::RemoveDuplicatesFromUnsortedListUsingLoop(CLinklist* root)
+{
+    if (IsNull(root))
+        return;
+
+    CLinklist* p = root, * q = nullptr;
+    while (!IsNull(p))
+    {
+        q = p->m_nextNode;
+        while (!IsNull(q))
+        {
+            if (p->m_data == q->m_data)
+            {
+                auto nextNode = q->m_nextNode;
+                delete q;
+                q = nextNode;
+                p->m_nextNode = q;
+            }
+            else
+            {
+                if (IsNull(q))
+                    break;
+                q = q->m_nextNode;
+            }
+        }
+        p = p->m_nextNode;
+    }
+}
+
+inline bool CLinklist::isPallindrome(CLinklist* root)
+{
+    return false;
+}
+
+inline void CLinklist::DeleteNodeAtPosition(CLinklist** root, int position)
+{
 }

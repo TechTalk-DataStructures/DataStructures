@@ -453,9 +453,61 @@ inline void CLinklist::RemoveDuplicatesFromUnsortedListUsingLoop(CLinklist* root
     }
 }
 
+// Two cases:
+    // 1. Even list
+    // 2. Odd list
 inline bool CLinklist::isPallindrome(CLinklist* root)
 {
-    return false;
+    if (IsNull(root) || IsNull(root->m_nextNode))
+    {
+        std::cout << "not enough nodes to check pallindrome\n";
+        return false;
+    }
+
+    CLinklist* one = nullptr, * two = nullptr;
+    auto temp = root;
+    CLinklist* slowNode = root;
+    CLinklist* fastNode = root->m_nextNode->m_nextNode;
+
+    while (!IsNull(fastNode))
+    {
+        if (fastNode->m_nextNode == nullptr) //odd case
+        {
+            one = root;
+            two = slowNode->m_nextNode->m_nextNode;
+            slowNode->m_nextNode = nullptr;
+            break;
+        }
+        slowNode = slowNode->m_nextNode;
+        fastNode = fastNode->m_nextNode->m_nextNode;
+
+        if (IsNull(fastNode)) /// even case
+        {
+            one = root;
+            two = slowNode->m_nextNode;
+            slowNode->m_nextNode = nullptr;
+            break;
+        }
+    }
+
+    two = ReverseRecursively(two);
+
+    // compare the two list elements now
+    // we have already broke the list into two parts so we wont be checking the length of the lists
+    bool isPallindrome = true;
+    while (one && two)
+    {
+        if (one->m_data == two->m_data)
+        {
+            one = one->m_nextNode;
+            two = two->m_nextNode;
+            continue;
+        }
+        isPallindrome = false;
+        break;
+    }
+
+    return isPallindrome;
 }
 
 inline void CLinklist::DeleteNodeAtPosition(CLinklist** root, int position)
